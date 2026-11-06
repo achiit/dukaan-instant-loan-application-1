@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Instant Loan Application</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💸</text></svg>">
+<style>
+:root{--bg:#f4f6f5;--card:#fff;--ink:#14231f;--mut:#5b6b66;--line:#d8e0dd;--acc:#0b7a5a;--acc-ink:#fff;--soft:#e3f2ec;--warn:#9a5b00;--warn-bg:#fff3dc;--err:#b3261e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1714;--card:#16221e;--ink:#e8f1ee;--mut:#9bb0a8;--line:#2a3a35;--acc:#3ecf9e;--acc-ink:#04231a;--soft:#1b3029;--warn:#f0b75a;--warn-bg:#2f2410;--err:#ff8a80}}
+:root[data-theme="dark"]{--bg:#0e1714;--card:#16221e;--ink:#e8f1ee;--mut:#9bb0a8;--line:#2a3a35;--acc:#3ecf9e;--acc-ink:#04231a;--soft:#1b3029;--warn:#f0b75a;--warn-bg:#2f2410;--err:#ff8a80}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans","Noto Sans Devanagari",system-ui,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:clamp(1.9rem,6vw,2.6rem);line-height:1.1;margin:8px 0 10px;letter-spacing:-.02em}
+h2{font-size:1.15rem;margin:0 0 12px}
+p{margin:0 0 12px}
+.lead{color:var(--mut);font-size:1.05rem}
+.terms{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.terms div{background:var(--soft);border-radius:10px;padding:12px}
+.terms b{display:block;font-size:1.25rem}
+.terms span{color:var(--mut);font-size:.85rem}
+.notice{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:12px 14px;font-size:.92rem;margin-bottom:18px}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mut);font:inherit;font-weight:600;padding:10px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+label{display:block;font-weight:600;font-size:.92rem;margin:12px 0 4px}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 12px}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:3px solid var(--acc);outline-offset:1px}
+textarea{resize:vertical;min-height:70px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 14px;font:inherit;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.check{display:flex;gap:8px;align-items:center;font-weight:500;margin-top:12px}
+.check input{width:auto}
+.calc{background:var(--soft);border-radius:10px;padding:14px;margin-top:14px}
+.calc div{display:flex;justify-content:space-between;padding:3px 0}
+.calc .tot{border-top:1px solid var(--line);margin-top:6px;padding-top:8px;font-weight:700}
+.btn{width:100%;margin-top:16px;background:var(--acc);color:var(--acc-ink);border:0;border-radius:10px;padding:14px;font:inherit;font-weight:700;cursor:pointer}
+.btn.alt{background:none;color:var(--ink);border:1px solid var(--line);margin-top:0;width:auto;padding:8px 14px}
+.err{color:var(--err);font-size:.9rem;margin-top:10px;min-height:1.2em}
+.app{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.app header{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.badge{background:var(--soft);border-radius:99px;padding:2px 10px;font-size:.82rem;font-weight:700}
+.steps{display:flex;gap:6px;margin:12px 0 4px}
+.steps i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.steps i.on{background:var(--acc)}
+.mut{color:var(--mut);font-size:.88rem}
+[hidden]{display:none!important}
+@media (max-width:520px){.row{grid-template-columns:1fr}.terms{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Instant loan application</h1>
+  <p class="lead">Apply for a small loan of ₹20 to ₹1,000 in about two minutes. त्वरित छोटा ऋण — ₹20 से ₹1,000 तक।</p>
+
+  <div class="terms">
+    <div><b>₹20–₹1,000</b><span>Loan amount</span></div>
+    <div><b>5% a month</b><span>Interest (₹0.50 per ₹10)</span></div>
+    <div><b>UPI or bank</b><span>Payout options</span></div>
+  </div>
+  <div class="notice">The loan itself costs nothing to apply for, but interest is charged at 5% every month. Check the repayment total below before you apply.</div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="t1" aria-selected="true" data-tab="apply">Apply</button>
+    <button role="tab" id="t2" aria-selected="false" data-tab="track">Track application</button>
+  </div>
+
+  <section id="apply">
+    <form class="card" id="form" novalidate>
+      <h2>Your details</h2>
+      <label for="name">Full name</label>
+      <input id="name" autocomplete="name">
+      <label for="addr">Address</label>
+      <textarea id="addr" autocomplete="street-address"></textarea>
+      <div class="row">
+        <div><label for="mob">Mobile number</label><input id="mob" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10 digits"></div>
+        <div><label for="mail">Email</label><input id="mail" type="email" autocomplete="email"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="hasPan"> I have a PAN card (optional)</label>
+      <div id="panBox" hidden><label for="pan">PAN number</label><input id="pan" maxlength="10" placeholder="ABCDE1234F" style="text-transform:uppercase"></div>
+
+      <h2 style="margin-top:22px">Loan amount</h2>
+      <label for="amt">Amount (₹20 to ₹1,000)</label>
+      <input id="amt" type="number" inputmode="numeric" min="20" max="1000" value="100">
+      <div class="chips" id="chips"></div>
+      <div class="calc" aria-live="polite">
+        <div><span>Loan amount</span><span id="cA">₹100</span></div>
+        <div><span>Interest per month (5%)</span><span id="cI">₹5.00</span></div>
+        <div class="tot"><span>Repay after 1 month</span><span id="cT">₹105.00</span></div>
+      </div>
+
+      <h2 style="margin-top:22px">Where should we send the money?</h2>
+      <label for="method">Payout method</label>
+      <select id="method"><option value="upi">UPI</option><option value="bank">Bank account</option></select>
+      <div id="upiBox"><label for="upi">UPI ID</label><input id="upi" placeholder="name@bank" autocapitalize="off"></div>
+      <div id="bankBox" hidden>
+        <label for="bank">Bank name</label><input id="bank">
+        <div class="row">
+          <div><label for="acc">Account number</label><input id="acc" inputmode="numeric"></div>
+          <div><label for="ifsc">IFSC code</label><input id="ifsc" maxlength="11" style="text-transform:uppercase"></div>
+        </div>
+        <label for="holder">Account holder name</label><input id="holder" placeholder="Same as above if blank">
+      </div>
+
+      <div class="err" id="err" role="alert"></div>
+      <button class="btn" type="submit">Submit application</button>
+      <p class="mut" style="margin-top:12px">Your details are saved only in this browser on this device. Nothing is sent to a server.</p>
+    </form>
+  </section>
+
+  <section id="track" hidden>
+    <div class="card">
+      <h2>Find your application</h2>
+      <label for="tid">Application ID</label>
+      <input id="tid" placeholder="LN-12345" style="text-transform:uppercase">
+      <button class="btn" id="find" type="button">Check status</button>
+      <div id="result" style="margin-top:16px"></div>
+    </div>
+    <div class="card">
+      <h2>Applications on this device</h2>
+      <div id="list"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var KEY='loan_applications_records', STAGES=['Pending','Approved','Disbursed'];
+  var $=function(i){return document.getElementById(i)};
+  var apps=[];
+  try{var s=localStorage.getItem(KEY);if(s){var p=JSON.parse(s);if(Array.isArray(p))apps=p}}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(apps))}catch(e){}}
+  function inr(n){return '₹'+Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+  function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
+
+  // tabs
+  document.querySelectorAll('[data-tab]').forEach(function(b){b.onclick=function(){
+    var t=b.dataset.tab;
+    $('apply').hidden=t!=='apply';$('track').hidden=t!=='track';
+    document.querySelectorAll('[data-tab]').forEach(function(x){x.setAttribute('aria-selected',x===b)});
+    if(t==='track')renderList();
+  }});
+
+  // amount chips + calculator
+  var QUICK=[20,50,100,250,500,1000];
+  function calc(){
+    var a=parseFloat($('amt').value)||0, i=a*0.05;
+    $('cA').textContent=inr(a);$('cI').textContent=inr(i);$('cT').textContent=inr(a+i);
+    document.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed',Number(c.dataset.v)===a)});
+  }
+  QUICK.forEach(function(v){var c=document.createElement('button');c.type='button';c.className='chip';c.dataset.v=v;c.textContent='₹'+v.toLocaleString('en-IN');c.onclick=function(){$('amt').value=v;calc()};$('chips').appendChild(c)});
+  $('amt').oninput=calc;calc();
+
+  $('hasPan').onchange=function(){$('panBox').hidden=!this.checked};
+  $('method').onchange=function(){var u=this.value==='upi';$('upiBox').hidden=!u;$('bankBox').hidden=u};
+
+  // submit
+  $('form').onsubmit=function(e){
+    e.preventDefault();
+    var name=$('name').value.trim(),addr=$('addr').value.trim(),mob=$('mob').value.trim(),mail=$('mail').value.trim(),
+        amt=parseFloat($('amt').value)||0,m=$('method').value,pan=$('pan').value.trim().toUpperCase(),msg='';
+    if(!name||!addr||!mob||!mail)msg='Fill in your name, address, mobile number and email.';
+    else if(!/^[6-9]\d{9}$/.test(mob))msg='Enter a valid 10-digit mobile number.';
+    else if(!/^\S+@\S+\.\S+$/.test(mail))msg='Enter a valid email address.';
+    else if($('hasPan').checked&&!/^[A-Z]{5}\d{4}[A-Z]$/.test(pan))msg='Enter your PAN in the format ABCDE1234F, or untick the PAN box.';
+    else if(amt<20||amt>1000)msg='Loan amount must be between ₹20 and ₹1,000.';
+    else if(m==='upi'&&!/^[\w.\-]{2,}@[\w]{2,}$/.test($('upi').value.trim()))msg='Enter a valid UPI ID, for example name@bank.';
+    else if(m==='bank'&&(!$('bank').value.trim()||!/^\d{9,18}$/.test($('acc').value.trim())||!/^[A-Za-z]{4}0[A-Za-z0-9]{6}$/.test($('ifsc').value.trim())))msg='Enter your bank name, a valid account number (9–18 digits) and IFSC code.';
+    $('err').textContent=msg;
+    if(msg)return;
+    var a={id:'LN-'+Math.floor(10000+Math.random()*90000),name:name,addr:addr,mob:mob,mail:mail,pan:$('hasPan').checked?pan:'',
+      amt:amt,interest:Number((amt*0.05).toFixed(2)),method:m,upi:$('upi').value.trim(),bank:$('bank').value.trim(),
+      acc:$('acc').value.trim(),ifsc:$('ifsc').value.trim().toUpperCase(),holder:$('holder').value.trim()||name,
+      at:new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}),status:'Pending'};
+    apps.unshift(a);save();
+    $('form').reset();$('panBox').hidden=true;$('upiBox').hidden=false;$('bankBox').hidden=true;$('amt').value=100;calc();
+    document.querySelector('[data-tab="track"]').click();
+    $('tid').value=a.id;show(a);
+  };
+
+  function mask(s){return s&&s.length>4?'•••• '+s.slice(-4):s}
+  function card(a){
+    var idx=Math.max(0,STAGES.indexOf(a.status)),dest=a.method==='upi'?'UPI '+esc(a.upi):esc(a.bank)+' '+esc(mask(a.acc));
+    var steps=a.status==='Rejected'?'<p class="mut">This application was not approved.</p>':
+      '<div class="steps">'+STAGES.map(function(_,i){return '<i class="'+(i<=idx?'on':'')+'"></i>'}).join('')+'</div><div class="mut">'+STAGES.join(' → ')+'</div>';
+    return '<div class="app"><header><b>'+esc(a.id)+' · '+esc(a.name)+'</b><span class="badge">'+esc(a.status)+'</span></header>'+
+      '<p class="mut" style="margin:6px 0 0">Applied '+esc(a.at)+'</p>'+
+      '<p style="margin:8px 0 0">Loan '+inr(a.amt)+' · Interest '+inr(a.interest)+' a month · Repay '+inr(a.amt+a.interest)+' after 1 month</p>'+
+      '<p class="mut" style="margin:4px 0 0">Payout to '+dest+'</p>'+steps+'</div>';
+  }
+  function show(a){$('result').innerHTML=a?card(a):'<p class="mut">No application found with that ID on this device. Check the ID and try again.</p>'}
+  $('find').onclick=function(){var id=$('tid').value.trim().toUpperCase();show(apps.filter(function(x){return x.id===id})[0])};
+  function renderList(){$('list').innerHTML=apps.length?apps.map(card).join(''):'<p class="mut">No applications yet. Use the Apply tab to start one.</p>'}
+})();
+</script>
+</body>
+</html>
